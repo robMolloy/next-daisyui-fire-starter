@@ -7,7 +7,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "firebase:emulators-start": "firebase emulators:start",
+    "dev:local": "NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true next dev"
   },
   "dependencies": {
     "firebase": "^10.12.3",
