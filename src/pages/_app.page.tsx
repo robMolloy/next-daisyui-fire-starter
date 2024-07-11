@@ -17,9 +17,9 @@ export default function App({ Component, pageProps }: AppProps) {
   }, []);
   return (
     <Layout>
-      {authStore.isLoggedIn ? (
-        <Component {...pageProps} />
-      ) : (
+      {authStore.isLoggedIn === undefined && <div>Loading...</div>}
+      {authStore.isLoggedIn === true && <Component {...pageProps} />}
+      {authStore.isLoggedIn === false && (
         <Typography fullPage>
           <UserAuthCreateLoginForm />
         </Typography>
