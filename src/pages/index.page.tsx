@@ -11,10 +11,7 @@ const Parent = () => {
   useEffect(() => {
     const colRef = collection(db, collName);
     const unsubscribe = onSnapshot(colRef, (snapshot) => {
-      const documents = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
+      const documents = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
       setDocs(documents);
     });
 
