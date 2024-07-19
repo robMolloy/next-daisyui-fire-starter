@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { NavBar } from "./NavBar";
+import { NavBar, NavBarDropdown } from "./NavBar";
 import { useAuthStore } from "@/stores/useAuthStore";
 import { logoutFirebaseUser } from "@/utils/firebaseAuthUtils";
 import { auth } from "@/config/firebaseConfig";
+import { ThemeSelector } from "../themeSelector";
 
 export type TPageLink = {
   label: string;
@@ -76,36 +77,51 @@ export const Layout = (p: { children: React.ReactNode }) => {
                       <BurgerMenuIcon />
                     </OpenDrawerWrapper>
                   </div>
-                  <Link href="/" className="btn p-0 text-xl">
+                  <Link href="/" className="p-0 text-3xl hover:underline">
                     next-daisyui-fire-starter
                   </Link>
                 </div>
               }
               rightChildren={
-                <div className="flex w-full justify-end">
-                  {safeAuthStore.status === "logged_in" && (
-                    <Link
-                      className="btn btn-sm hover:underline"
-                      href="/"
-                      onClick={() => logoutFirebaseUser({ auth: auth })}
+                <>
+                  <div className="flex w-full items-center justify-end gap-6">
+                    <NavBarDropdown
+                      labelChildren={(p: { tabIndex: 0 }) => (
+                        <div className="link no-underline hover:underline" tabIndex={p.tabIndex}>
+                          <div>Theme &#x25BC;</div>
+                        </div>
+                      )}
                     >
-                      Log Out
-                    </Link>
-                  )}
-                </div>
+                      <div className="overflow-y-auto p-4">
+                        <ThemeSelector />
+                      </div>
+                    </NavBarDropdown>
+                    {safeAuthStore.status === "logged_in" && (
+                      <Link
+                        className="link no-underline hover:underline"
+                        href="/"
+                        onClick={() => logoutFirebaseUser({ auth: auth })}
+                      >
+                        Log Out
+                      </Link>
+                    )}
+                  </div>
+                </>
               }
               bottomChildren={
-                <div className="breadcrumbs pl-4 text-sm">
-                  <ul>
-                    <li>
-                      <a>Home</a>
-                    </li>
-                    <li>
-                      <a>Documents</a>
-                    </li>
-                    <li>Add Document</li>
-                  </ul>
-                </div>
+                safeAuthStore.status === "logged_in" && (
+                  <div className="breadcrumbs pl-4 text-sm">
+                    <ul>
+                      <li>
+                        <a>Home</a>
+                      </li>
+                      <li>
+                        <a>Documents</a>
+                      </li>
+                      <li>Add Document</li>
+                    </ul>
+                  </div>
+                )
               }
             />
           </NavBarContainer>

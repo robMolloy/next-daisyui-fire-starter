@@ -33,19 +33,23 @@ export const NavBarContainer = (p: { children: React.ReactNode }) => {
   );
 };
 
-export const NavBarDropdown = (p: { children: React.ReactNode; label: string }) => {
+export const NavBarDropdown = (p: {
+  children: React.ReactNode;
+  labelChildren: (p: { tabIndex: 0 }) => React.JSX.Element;
+}) => {
   return (
     <div className="dropdown dropdown-end dropdown-bottom">
-      <div tabIndex={0} role="button" className="btn btn-sm hover:underline">
-        <div>{p.label} &#x25BC;</div>
-      </div>
+      <p.labelChildren tabIndex={0} />
       <div
         tabIndex={0}
         className="dropdown-content mt-1 rounded-box border bg-base-100 p-0 shadow"
         style={{ opacity: "0.94" }}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="max-h-[75vh] min-w-52 rounded-box" onClick={(e) => e.stopPropagation()}>
+        <div
+          className="max-h-[75vh] min-w-52 overflow-y-auto rounded-box"
+          onClick={(e) => e.stopPropagation()}
+        >
           {p.children}
         </div>
       </div>
