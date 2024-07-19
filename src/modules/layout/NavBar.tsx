@@ -1,44 +1,52 @@
-import Link from "next/link";
 import React from "react";
 
-const BurgerMenuIcon = () => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    className="inline-block h-6 w-6 stroke-current"
-  >
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      strokeWidth="2"
-      d="M4 6h16M4 12h16M4 18h16"
-    ></path>
-  </svg>
-);
-
 export type TNavbarProps = {
-  OpenDrawerWrapper: React.FC<{ children: React.ReactNode }>;
-  children: React.ReactNode;
+  OpenDrawerWrapper?: React.FC<{ children: React.ReactNode }>;
+  leftChildren?: React.ReactNode;
+  centerChildren?: React.ReactNode;
+  rightChildren?: React.ReactNode;
+  bottomChildren?: React.ReactNode;
 };
 
 export const NavBar = (p: TNavbarProps) => {
   return (
     <div className="flex w-full flex-col">
       <div className="flex w-full">
-        <div className="block sm:hidden">
-          <p.OpenDrawerWrapper>
-            <BurgerMenuIcon />
-          </p.OpenDrawerWrapper>
+        <div className="flex flex-1">{p.leftChildren}</div>
+        <div className="">
+          <div>{p.centerChildren}</div>
         </div>
+        <div className="flex flex-1">{p.rightChildren}</div>
+      </div>
+      <div className="flex w-full">
+        <div className="flex flex-1">{p.bottomChildren}</div>
+      </div>
+    </div>
+  );
+};
 
-        <div className="flex-1">
-          <Link href="/" className="btn btn-ghost text-xl">
-            next-daisyui-fire-starter
-          </Link>
-        </div>
-        <div className="flex gap-4">
-          <div>{p.children}</div>
+export const NavBarContainer = (p: { children: React.ReactNode }) => {
+  return (
+    <div className="sticky top-0 z-10">
+      <div className="navbar w-full border-b bg-base-300">{p.children}</div>
+    </div>
+  );
+};
+
+export const NavBarDropdown = (p: { children: React.ReactNode; label: string }) => {
+  return (
+    <div className="dropdown dropdown-end dropdown-bottom">
+      <div tabIndex={0} role="button" className="btn btn-sm hover:underline">
+        <div>{p.label} &#x25BC;</div>
+      </div>
+      <div
+        tabIndex={0}
+        className="dropdown-content mt-1 rounded-box border bg-base-100 p-0 shadow"
+        style={{ opacity: "0.94" }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="max-h-[75vh] min-w-52 rounded-box" onClick={(e) => e.stopPropagation()}>
+          {p.children}
         </div>
       </div>
     </div>

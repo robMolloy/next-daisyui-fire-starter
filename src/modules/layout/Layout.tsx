@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { NavBar } from "./NavBar";
 
 export type TPageLink = {
@@ -9,22 +10,14 @@ export type TPageLink = {
 
 const CloseDrawerWrapper: React.FC<{ children?: React.ReactNode }> = (p) => {
   return (
-    <label
-      htmlFor="sidebar"
-      aria-label="close sidebar"
-      className="drawer-overlay"
-    >
+    <label htmlFor="sidebar" aria-label="close sidebar" className="drawer-overlay">
       {p.children}
     </label>
   );
 };
 const OpenDrawerWrapper: React.FC<{ children?: React.ReactNode }> = (p) => {
   return (
-    <label
-      htmlFor="sidebar"
-      aria-label="open sidebar"
-      className="btn btn-square btn-ghost"
-    >
+    <label htmlFor="sidebar" aria-label="open sidebar" className="btn btn-square btn-ghost">
       {p.children}
     </label>
   );
@@ -38,23 +31,30 @@ const NavBarContainer = (p: { children: React.ReactNode }) => {
   );
 };
 const DrawerContainer = (p: { children: React.ReactNode }) => {
+  return <div className="m-0 min-h-full min-w-80 border-r bg-base-100 p-1">{p.children}</div>;
+};
+
+const ContainerWithSpotlightBackgroundTop = () => {
   return (
-    <div className="m-0 min-h-full min-w-80 border-r bg-base-100 p-1">
-      {p.children}
-    </div>
+    <div className="absolute top-0 z-[-99] h-[90vh] min-w-full bg-gradient-to-tr from-base-100 via-base-100 via-75% to-primary sm:via-65%" />
   );
 };
 
-const ContainerWithSpotlightBackgroundTop = (p: {
-  children: React.ReactNode;
-}) => {
-  return (
-    <div className="relative min-h-[50vh]">
-      <div className="absolute top-0 z-[-1] min-h-[90vh] min-w-full bg-gradient-to-tr from-base-100 via-base-100 via-75% to-primary sm:via-65%"></div>
-      {p.children}
-    </div>
-  );
-};
+const BurgerMenuIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    className="inline-block h-6 w-6 stroke-current"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      d="M4 6h16M4 12h16M4 18h16"
+    ></path>
+  </svg>
+);
 
 export const Layout = (p: { children: React.ReactNode }) => {
   return (
@@ -63,13 +63,36 @@ export const Layout = (p: { children: React.ReactNode }) => {
         <input id="sidebar" type="checkbox" className="drawer-toggle" />
         <div className="drawer-content flex flex-col">
           <NavBarContainer>
-            <NavBar OpenDrawerWrapper={OpenDrawerWrapper}>
-              <div>asd</div>
-            </NavBar>
+            <NavBar
+              leftChildren={
+                <div className="flex gap-2 pl-4">
+                  <div className="block sm:hidden">
+                    <OpenDrawerWrapper>
+                      <BurgerMenuIcon />
+                    </OpenDrawerWrapper>
+                  </div>
+                  <Link href="/" className="btn p-0 text-xl">
+                    next-daisyui-fire-starter
+                  </Link>
+                </div>
+              }
+              bottomChildren={
+                <div className="breadcrumbs pl-4 text-sm">
+                  <ul>
+                    <li>
+                      <a>Home</a>
+                    </li>
+                    <li>
+                      <a>Documents</a>
+                    </li>
+                    <li>Add Document</li>
+                  </ul>
+                </div>
+              }
+            />
           </NavBarContainer>
-          <ContainerWithSpotlightBackgroundTop>
-            {p.children}
-          </ContainerWithSpotlightBackgroundTop>
+          {p.children}
+          <ContainerWithSpotlightBackgroundTop />
         </div>
         <div className="drawer-side z-[11]">
           <CloseDrawerWrapper />
@@ -79,7 +102,6 @@ export const Layout = (p: { children: React.ReactNode }) => {
           </DrawerContainer>
         </div>
       </div>
-      {/* <Footer /> */}
     </>
   );
 };
