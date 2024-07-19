@@ -1,11 +1,9 @@
+import { auth } from "@/config/firebaseConfig";
 import { createFirebaseUser } from "@/utils/firebaseAuthUtils";
 import React, { useState } from "react";
 import { z } from "zod";
 
-type TRule = (
-  | { validSchema: z.ZodTypeAny }
-  | { invalidSchema: z.ZodTypeAny }
-) & {
+type TRule = ({ validSchema: z.ZodTypeAny } | { invalidSchema: z.ZodTypeAny }) & {
   message: string;
 };
 type TRules = TRule[];
@@ -61,8 +59,7 @@ export const AuthCreateUserForm = (p: TAuthCreateUserFormProps) => {
   const [userPassword, setUserPassword] = useState("");
   const [userPasswordErrorMessage, setUserPasswordErrorMessage] = useState("");
   const [userPasswordConfirm, setUserPasswordConfirm] = useState("");
-  const [userPasswordConfirmErrorMessage, setUserPasswordConfirmErrorMessage] =
-    useState("");
+  const [userPasswordConfirmErrorMessage, setUserPasswordConfirmErrorMessage] = useState("");
   const [formErrorMessage, setFormErrorMessage] = useState("");
 
   const [isLoading, setIsLoading] = useState(false);
@@ -74,15 +71,12 @@ export const AuthCreateUserForm = (p: TAuthCreateUserFormProps) => {
     checkUserPasswordValid();
     checkUserPasswordConfirmValid();
 
-    if (
-      !!userEmailErrorMessage ||
-      !!userPasswordErrorMessage ||
-      !!userPasswordConfirmErrorMessage
-    )
+    if (!!userEmailErrorMessage || !!userPasswordErrorMessage || !!userPasswordConfirmErrorMessage)
       return;
     setIsLoading(true);
 
     const createResponse = await createFirebaseUser({
+      auth,
       userEmail: userEmail,
       userPassword: userPassword,
     });
@@ -127,11 +121,7 @@ export const AuthCreateUserForm = (p: TAuthCreateUserFormProps) => {
         )}
         <label className="form-control w-full">
           <div className="label">
-            <span
-              className={`label-text ${
-                userEmailErrorMessage ? "bg-error" : ""
-              }`}
-            >
+            <span className={`label-text ${userEmailErrorMessage ? "bg-error" : ""}`}>
               {userEmailErrorMessage || "Type your email"}
             </span>
           </div>
@@ -154,11 +144,7 @@ export const AuthCreateUserForm = (p: TAuthCreateUserFormProps) => {
       <div>
         <label className="form-control">
           <div className="label">
-            <span
-              className={`label-text ${
-                userPasswordErrorMessage ? "bg-error" : ""
-              }`}
-            >
+            <span className={`label-text ${userPasswordErrorMessage ? "bg-error" : ""}`}>
               {userPasswordErrorMessage || "Type your password"}
             </span>
           </div>
@@ -181,11 +167,7 @@ export const AuthCreateUserForm = (p: TAuthCreateUserFormProps) => {
       <div>
         <label className="form-control">
           <div className="label">
-            <span
-              className={`label-text ${
-                userPasswordConfirmErrorMessage ? "bg-error" : ""
-              }`}
-            >
+            <span className={`label-text ${userPasswordConfirmErrorMessage ? "bg-error" : ""}`}>
               {userPasswordConfirmErrorMessage || "Confirm your password"}
             </span>
           </div>
@@ -215,9 +197,7 @@ export const AuthCreateUserForm = (p: TAuthCreateUserFormProps) => {
         }}
       >
         Submit
-        {!!isLoading && (
-          <span className="loading loading-spinner loading-md"></span>
-        )}
+        {!!isLoading && <span className="loading loading-spinner loading-md"></span>}
       </button>
     </form>
   );

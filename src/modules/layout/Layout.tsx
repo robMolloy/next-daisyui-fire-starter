@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { NavBar } from "./NavBar";
+import { useAuthStore } from "@/stores/useAuthStore";
+import { logoutFirebaseUser } from "@/utils/firebaseAuthUtils";
+import { auth } from "@/config/firebaseConfig";
 
 export type TPageLink = {
   label: string;
@@ -57,6 +60,8 @@ const BurgerMenuIcon = () => (
 );
 
 export const Layout = (p: { children: React.ReactNode }) => {
+  const authStore = useAuthStore();
+  const safeAuthStore = authStore.getSafeStore();
   return (
     <>
       <div className="drawer">
@@ -74,6 +79,19 @@ export const Layout = (p: { children: React.ReactNode }) => {
                   <Link href="/" className="btn p-0 text-xl">
                     next-daisyui-fire-starter
                   </Link>
+                </div>
+              }
+              rightChildren={
+                <div className="flex w-full justify-end">
+                  {safeAuthStore.status === "logged_in" && (
+                    <Link
+                      className="btn btn-sm hover:underline"
+                      href="/"
+                      onClick={() => logoutFirebaseUser({ auth: auth })}
+                    >
+                      Log Out
+                    </Link>
+                  )}
                 </div>
               }
               bottomChildren={

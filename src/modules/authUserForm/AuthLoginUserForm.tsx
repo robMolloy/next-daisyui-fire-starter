@@ -1,10 +1,8 @@
+import { auth } from "@/config/firebaseConfig";
 import { loginFirebaseUser } from "@/utils/firebaseAuthUtils";
 import React, { useState } from "react";
 import { z } from "zod";
-type TRule = (
-  | { validSchema: z.ZodTypeAny }
-  | { invalidSchema: z.ZodTypeAny }
-) & {
+type TRule = ({ validSchema: z.ZodTypeAny } | { invalidSchema: z.ZodTypeAny }) & {
   message: string;
 };
 type TRules = TRule[];
@@ -72,7 +70,7 @@ export const AuthLoginUserForm = (p: TAuthLoginUserFormProps) => {
     setIsLoading(true);
 
     const formData = { userEmail: userEmail, userPassword: userPassword };
-    const loginResponse = await loginFirebaseUser(formData);
+    const loginResponse = await loginFirebaseUser({ auth, ...formData });
     if (loginResponse.success) {
       p.onLoginSuccess();
     } else {
@@ -105,9 +103,7 @@ export const AuthLoginUserForm = (p: TAuthLoginUserFormProps) => {
         )}
         <label className="form-control w-full">
           <div className="label">
-            <span
-              className={`label-text${userEmailErrorMessage ? "bg-error" : ""}`}
-            >
+            <span className={`label-text${userEmailErrorMessage ? "bg-error" : ""}`}>
               {userEmailErrorMessage || "Type your email"}
             </span>
           </div>
@@ -130,11 +126,7 @@ export const AuthLoginUserForm = (p: TAuthLoginUserFormProps) => {
       <div>
         <label className="form-control">
           <div className="label">
-            <span
-              className={`label-text${
-                userPasswordErrorMessage ? "bg-error" : ""
-              }`}
-            >
+            <span className={`label-text${userPasswordErrorMessage ? "bg-error" : ""}`}>
               {userPasswordErrorMessage || "Type your password"}
             </span>
           </div>
@@ -164,9 +156,7 @@ export const AuthLoginUserForm = (p: TAuthLoginUserFormProps) => {
         }}
       >
         Submit
-        {!!isLoading && (
-          <span className="loading loading-spinner loading-md"></span>
-        )}
+        {!!isLoading && <span className="loading loading-spinner loading-md"></span>}
       </button>
     </form>
   );

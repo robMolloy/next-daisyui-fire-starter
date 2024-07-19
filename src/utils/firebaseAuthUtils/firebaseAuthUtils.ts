@@ -1,19 +1,20 @@
-import { auth } from "@/config/firebaseConfig";
 import {
+  Auth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
 
 export const createFirebaseUser = async (p: {
+  auth: Auth;
   userEmail: string;
   userPassword: string;
 }) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
-      auth,
+      p.auth,
       p.userEmail,
-      p.userPassword
+      p.userPassword,
     );
 
     const user = userCredential.user;
@@ -26,15 +27,12 @@ export const createFirebaseUser = async (p: {
   }
 };
 export const loginFirebaseUser = async (p: {
+  auth: Auth;
   userEmail: string;
   userPassword: string;
 }) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(
-      auth,
-      p.userEmail,
-      p.userPassword
-    );
+    const userCredential = await signInWithEmailAndPassword(p.auth, p.userEmail, p.userPassword);
 
     const user = userCredential.user;
     if (!user) throw new Error("user login unsuccessful");
@@ -46,9 +44,9 @@ export const loginFirebaseUser = async (p: {
   }
 };
 
-export const logoutFirebaseUser = async () => {
+export const logoutFirebaseUser = async (p: { auth: Auth }) => {
   try {
-    await signOut(auth);
+    await signOut(p.auth);
     return { success: true } as const;
   } catch (e) {
     const message = (e as { message?: string }).message;
