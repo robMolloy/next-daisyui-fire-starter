@@ -66,7 +66,7 @@ export const Layout = (p: { children: React.ReactNode }) => {
     <>
       <div className="drawer">
         <input id="sidebar" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content flex flex-col">
+        <div className="drawer-content">
           <NavBarContainer>
             <NavBar
               leftChildren={
