@@ -70,7 +70,7 @@ export const AuthLoginUserForm = (p: TAuthLoginUserFormProps) => {
     setIsLoading(true);
 
     const formData = { userEmail: userEmail, userPassword: userPassword };
-    const loginResponse = await loginFirebaseUser({ auth, ...formData });
+    const loginResponse = await loginFirebaseUser({ ...formData, auth });
     if (loginResponse.success) {
       p.onLoginSuccess();
     } else {
