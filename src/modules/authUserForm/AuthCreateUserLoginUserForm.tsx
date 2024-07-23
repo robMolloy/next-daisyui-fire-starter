@@ -1,8 +1,12 @@
+import { useNotifyStore } from "@/modules/notify";
 import { useState } from "react";
 import { AuthCreateUserForm, AuthLoginUserForm } from ".";
 
 export const UserAuthCreateLoginForm = () => {
+  const notifyStore = useNotifyStore();
+
   const [mode, setMode] = useState<"login" | "create">("login");
+
   return (
     <div
       className="box card border-2 border-base-content bg-base-300"
@@ -28,20 +32,20 @@ export const UserAuthCreateLoginForm = () => {
         {mode === "login" && (
           <AuthLoginUserForm
             onLoginSuccess={() => {
-              console.log("login success");
+              notifyStore.push({ type: "alert-success", text: "login success" });
             }}
             onLoginFail={() => {
-              console.log("login fail");
+              notifyStore.push({ type: "alert-warning", text: "login failed" });
             }}
           />
         )}
         {mode === "create" && (
           <AuthCreateUserForm
             onCreateUserSuccess={() => {
-              console.log("user created success");
+              notifyStore.push({ type: "alert-success", text: "user created success" });
             }}
             onCreateUserFail={() => {
-              console.log("user created failed");
+              notifyStore.push({ type: "alert-warning", text: "user created failed" });
             }}
           />
         )}

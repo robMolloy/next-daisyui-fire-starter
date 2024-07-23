@@ -2,10 +2,12 @@ import { Typography } from "@/components";
 import { auth } from "@/config/firebaseConfig";
 import { UserAuthCreateLoginForm } from "@/modules/authUserForm";
 import { Layout } from "@/modules/layout";
+import { Notify } from "@/modules/notify";
 import { useAuthStore, useAuthStoreBase } from "@/stores/useAuthStore";
 import "@/styles/globals.css";
 import { onAuthStateChanged } from "firebase/auth";
 import type { AppProps } from "next/app";
+import Head from "next/head";
 import { useEffect } from "react";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -19,14 +21,22 @@ export default function App({ Component, pageProps }: AppProps) {
     });
   }, []);
   return (
-    <Layout>
-      {safeAuthStore.status === "loading" && <div>Loading...</div>}
-      {safeAuthStore.status === "logged_in" && <Component {...pageProps} />}
-      {safeAuthStore.status === "logged_out" && (
-        <Typography fullPage>
-          <UserAuthCreateLoginForm />
-        </Typography>
-      )}
-    </Layout>
+    <>
+      <Head>
+        <title>next-daisyui-fire-starter</title>
+      </Head>
+
+      <Notify />
+
+      <Layout>
+        {safeAuthStore.status === "loading" && <div>Loading...</div>}
+        {safeAuthStore.status === "logged_in" && <Component {...pageProps} />}
+        {safeAuthStore.status === "logged_out" && (
+          <Typography fullPage>
+            <UserAuthCreateLoginForm />
+          </Typography>
+        )}
+      </Layout>
+    </>
   );
 }
