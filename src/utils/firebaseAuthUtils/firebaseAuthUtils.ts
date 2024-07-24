@@ -4,17 +4,19 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from "firebase/auth";
+import { z } from "zod";
 
-export const createFirebaseUser = async (p: {
-  auth: Auth;
+export type TCreateUserFormData = {
   userEmail: string;
   userPassword: string;
-}) => {
+  userPasswordConfirm: string;
+};
+export const createFirebaseUser = async (p: { auth: Auth; formData: TCreateUserFormData }) => {
   try {
     const userCredential = await createUserWithEmailAndPassword(
       p.auth,
-      p.userEmail,
-      p.userPassword,
+      p.formData.userEmail,
+      p.formData.userPassword,
     );
 
     const user = userCredential.user;
@@ -26,13 +28,15 @@ export const createFirebaseUser = async (p: {
     return { success: false, error: { message } } as const;
   }
 };
-export const loginFirebaseUser = async (p: {
-  auth: Auth;
-  userEmail: string;
-  userPassword: string;
-}) => {
+const loginFormDataSchema = z.object({ userEmail: z.string(), userPassword: z.string() });
+export type TLoginFormData = z.infer<typeof loginFormDataSchema>;
+export const loginFirebaseUser = async (p: { auth: Auth; formData: TLoginFormData }) => {
   try {
-    const userCredential = await signInWithEmailAndPassword(p.auth, p.userEmail, p.userPassword);
+    const userCredential = await signInWithEmailAndPassword(
+      p.auth,
+      p.formData.userEmail,
+      p.formData.userPassword,
+    );
 
     const user = userCredential.user;
     if (!user) throw new Error("user login unsuccessful");

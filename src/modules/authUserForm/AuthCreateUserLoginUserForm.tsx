@@ -3,6 +3,11 @@ import { useState } from "react";
 import { AuthCreateUserForm, AuthLoginUserForm } from ".";
 
 export const UserAuthCreateLoginForm = () => {
+  const [formData, setFormData] = useState({
+    userEmail: "",
+    userPassword: "",
+    userPasswordConfirm: "",
+  });
   const notifyStore = useNotifyStore();
 
   const [mode, setMode] = useState<"login" | "create">("login");
@@ -31,21 +36,30 @@ export const UserAuthCreateLoginForm = () => {
       <div className="card-body items-center text-center">
         {mode === "login" && (
           <AuthLoginUserForm
+            formData={formData}
+            onFormDataChange={(newFormData) => setFormData({ ...formData, ...newFormData })}
             onLoginSuccess={() => {
               notifyStore.push({ type: "alert-success", text: "login success" });
             }}
-            onLoginFail={() => {
-              notifyStore.push({ type: "alert-warning", text: "login failed" });
+            onLoginFail={(errMsgObj) => {
+              const errMsg =
+                Object.values(errMsgObj)
+                  .filter((x) => !!x)
+                  .join(", ") ?? "unknown error";
+              notifyStore.push({ type: "alert-warning", text: `login failed: ${errMsg}` });
             }}
           />
         )}
         {mode === "create" && (
           <AuthCreateUserForm
+            formData={formData}
+            onFormDataChange={(newFormData) => setFormData({ ...formData, ...newFormData })}
             onCreateUserSuccess={() => {
               notifyStore.push({ type: "alert-success", text: "user created success" });
             }}
-            onCreateUserFail={() => {
-              notifyStore.push({ type: "alert-warning", text: "user created failed" });
+            onCreateUserFail={(initErrMsg) => {
+              const errMsg = initErrMsg ? initErrMsg : "unknown error";
+              notifyStore.push({ type: "alert-warning", text: `user created: ${errMsg}` });
             }}
           />
         )}
