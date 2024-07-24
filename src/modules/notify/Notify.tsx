@@ -57,20 +57,20 @@ export const useNotifyStore = create<TNotifyStoreProps>((set, get) => ({
 
 export const Notify = () => {
   const notifyStore = useNotifyStore();
+  const visibleAlerts = notifyStore.getVisibleAlerts();
 
+  if (visibleAlerts.length === 0) return <></>;
   return (
-    <>
-      <div className="toast toast-center toast-top z-[12]">
-        {notifyStore.getVisibleAlerts().map((x) => (
-          <div
-            onClick={() => notifyStore.pushToHide(x)}
-            key={x.id}
-            className={`alert ${x.type} cursor-pointer`}
-          >
-            <div>{x.text}</div>
-          </div>
-        ))}
-      </div>
-    </>
+    <div className="toast toast-center toast-top z-[12]">
+      {notifyStore.getVisibleAlerts().map((x) => (
+        <div
+          onClick={() => notifyStore.pushToHide(x)}
+          key={x.id}
+          className={`alert ${x.type} flex min-w-40 cursor-pointer justify-center`}
+        >
+          <div>{x.text}</div>
+        </div>
+      ))}
+    </div>
   );
 };
