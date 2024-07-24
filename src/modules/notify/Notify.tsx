@@ -1,10 +1,12 @@
+import React from "react";
 import { v4 as uuid } from "uuid";
 import { create } from "zustand";
 
 type TAlertPropsSeed = {
   id?: string;
   type?: "alert-success" | "alert-info" | "alert-error" | "alert-warning";
-  text: string;
+  heading?: string;
+  children?: React.ReactNode;
   duration?: number;
 };
 type TAlertProps = Required<TAlertPropsSeed>;
@@ -38,7 +40,8 @@ export const useNotifyStore = create<TNotifyStoreProps>((set, get) => ({
       const p: TAlertProps = {
         id: initProps.id ? initProps.id : uuid(),
         type: initProps.type ? initProps.type : "alert-info",
-        text: initProps.text,
+        heading: initProps.heading ?? "",
+        children: initProps.children ?? <></>,
         duration: initProps.duration ? initProps.duration : 3000,
       };
 
@@ -68,7 +71,8 @@ export const Notify = () => {
           key={x.id}
           className={`alert ${x.type} flex min-w-40 cursor-pointer justify-center`}
         >
-          <div>{x.text}</div>
+          <h2 className="text-center font-bold">{x.heading}</h2>
+          <div>{x.children}</div>
         </div>
       ))}
     </div>

@@ -39,14 +39,14 @@ export const UserAuthCreateLoginForm = () => {
             formData={formData}
             onFormDataChange={(newFormData) => setFormData({ ...formData, ...newFormData })}
             onLoginSuccess={() => {
-              notifyStore.push({ type: "alert-success", text: "login success" });
+              notifyStore.push({ type: "alert-success", children: "login success" });
             }}
             onLoginFail={(errMsgObj) => {
               const errMsg =
                 Object.values(errMsgObj)
                   .filter((x) => !!x)
                   .join(", ") ?? "unknown error";
-              notifyStore.push({ type: "alert-warning", text: `login failed: ${errMsg}` });
+              notifyStore.push({ type: "alert-warning", children: `login failed: ${errMsg}` });
             }}
           />
         )}
@@ -55,11 +55,11 @@ export const UserAuthCreateLoginForm = () => {
             formData={formData}
             onFormDataChange={(newFormData) => setFormData({ ...formData, ...newFormData })}
             onCreateUserSuccess={() => {
-              notifyStore.push({ type: "alert-success", text: "user created success" });
+              notifyStore.push({ type: "alert-success", children: "user created success" });
             }}
             onCreateUserFail={(initErrMsg) => {
               const errMsg = initErrMsg ? initErrMsg : "unknown error";
-              notifyStore.push({ type: "alert-warning", text: `user created: ${errMsg}` });
+              notifyStore.push({ type: "alert-warning", children: `user created: ${errMsg}` });
             }}
           />
         )}
