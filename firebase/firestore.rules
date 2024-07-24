@@ -26,11 +26,14 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/chatGroups/$(chatGroupId)).data;
     }
 
+    function validateDiceRollNewDbEntry(data) {
+      return data.createdAt is timestamp && incomingAuth().uid == incomingData().uid;
+    }
 
 		match /diceRolls/{id} {
-      allow get: if true;
-      allow list: if true;
-      allow create: if userOwnsIncomingDoc()
+      allow get: if userOwnsExistingDoc();
+      allow list: if userOwnsExistingDoc();
+      allow create: if userOwnsIncomingDoc() && validateDiceRollDbEntry(incomingData())
       allow update: if false;
       allow delete: if false;
     }

@@ -71,8 +71,10 @@ export const Notify = () => {
           key={x.id}
           className={`alert ${x.type} flex min-w-40 cursor-pointer justify-center`}
         >
-          <h2 className="text-center font-bold">{x.heading}</h2>
-          <div>{x.children}</div>
+          <div>
+            <h2 className="text-center font-bold">{x.heading}</h2>
+            <div>{x.children}</div>
+          </div>
         </div>
       ))}
     </div>

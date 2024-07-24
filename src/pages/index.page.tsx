@@ -1,31 +1,40 @@
 import { Typography } from "@/components";
-import { auth, db } from "@/config/firebaseConfig";
-import { addDoc, collection, onSnapshot } from "firebase/firestore";
+import { db } from "@/config/firebaseConfig";
+import {
+  TDiceRollDbEntry,
+  addDiceRollDbEntry as createDiceRollDbEntry,
+  watchValidDiceRollDbEntries,
+} from "@/db/dbDiceRolls";
+import { useAuthStore } from "@/stores/useAuthStore";
 import { useEffect, useState } from "react";
 
-const collName = "diceRolls";
-
 const Parent = () => {
-  const [docs, setDocs] = useState<any[]>([]);
+  const authStore = useAuthStore();
+  const [docs, setDocs] = useState<TDiceRollDbEntry[]>([]);
 
   useEffect(() => {
-    const colRef = collection(db, collName);
-    const unsubscribe = onSnapshot(colRef, (snapshot) => {
-      const documents = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-      setDocs(documents);
+    const safeStore = authStore.getSafeStore();
+    if (safeStore.status !== "logged_in") return;
+    const unsubscribe = watchValidDiceRollDbEntries({
+      db,
+      uid: safeStore.user.uid,
+      onNewSnapshot: (x) => setDocs(x),
     });
 
     return () => unsubscribe();
   }, []);
+
   return (
     <main className={`min-h-screen`}>
       <Typography fullPage>
         <button
           className="btn"
           onClick={() => {
-            addDoc(collection(db, collName), {
-              uid: auth.currentUser?.uid,
-              number: Math.floor(Math.random() * 10000000),
+            const safeStore = authStore.getSafeStore();
+            if (safeStore.status !== "logged_in") return;
+            createDiceRollDbEntry({
+              db: db,
+              formData: { uid: safeStore.user.uid, number: Math.floor(Math.random() * 6) },
             });
           }}
         >
