@@ -36,6 +36,7 @@ yarn-error.log*
 next-env.d.ts
 
 firebase/caches/*
+!firebase/caches/.gitkeep
 firebase-debug.log
 firestore-debug.log
 ui-debug.log
