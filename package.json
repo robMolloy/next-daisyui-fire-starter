@@ -7,8 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "firebase:emulators-start": "node_modules/.bin/firebase emulators:start",
-    "firebase:emulators-start:offline": "node_modules/.bin/firebase --project demo-contently-2c50b emulators:start",
+    "test": "jest --watchAll --detectOpenHandles",
+    "firebase:emulators-start": "node_modules/.bin/firebase --export-on-exit=\"./firebase/caches/$(date +%Y-%m-%d+%H:%M:%S)\" --import=\"./firebase/seeds/seed1\" emulators:start",
+    "firebase:emulators-start:offline": "node_modules/.bin/firebase --export-on-exit=\"./firebase/caches/$(date +%Y-%m-%d+%H:%M:%S)\" --import=\"./firebase/seeds/seed1\" --project demo-next-firebase-emulator emulators:start",
     "dev": "next dev",
     "dev:offline": "NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true NEXT_PUBLIC_USE_FIREBASE_EMULATOR_OFFLINE=true next dev",
     "dev:remote-db": "NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true next dev"
